@@ -50,6 +50,7 @@ class ProxmoxVMData:
     network_in: float | UndefinedType
     network_out: float | UndefinedType
     status: str | UndefinedType
+    locked: bool | UndefinedType
     uptime: int | UndefinedType
 
 
@@ -69,6 +70,7 @@ class ProxmoxLXCData:
     network_in: float | UndefinedType
     network_out: float | UndefinedType
     status: str | UndefinedType
+    locked: bool | UndefinedType
     swap_total: float | UndefinedType
     swap_free: float | UndefinedType
     swap_used: float | UndefinedType

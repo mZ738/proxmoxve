@@ -106,6 +106,17 @@ PROXMOX_BUTTON_VM: Final[tuple[ProxmoxButtonEntityDescription, ...]] = (
         translation_key="stop",
     ),
     ProxmoxButtonEntityDescription(
+        key=ProxmoxCommand.UNLOCK,
+        icon="mdi:lock-open",
+        name="Unlock",
+        # QEMU only: the LXC config API has no way to clear a lock
+        # (no skiplock parameter), so `pct unlock` on the node is the only
+        # option for containers. Unlock a VM needs root@pam (not a token).
+        api_category=ProxmoxType.QEMU,
+        entity_registry_enabled_default=False,
+        translation_key="unlock",
+    ),
+    ProxmoxButtonEntityDescription(
         key=ProxmoxCommand.RESUME,
         icon="mdi:play",
         name="Resume",

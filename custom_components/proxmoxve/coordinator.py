@@ -369,6 +369,7 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
                 if ("lock" in api_status and api_status["lock"] == "suspended")
                 else (api_status.get("status", UNDEFINED))
             ),
+            locked=bool(api_status.get("lock")),
             name=api_status.get("name", UNDEFINED),
             health=api_status.get("qmpstatus", UNDEFINED),
             uptime=api_status.get("uptime", UNDEFINED),
@@ -461,6 +462,7 @@ class ProxmoxLXCCoordinator(ProxmoxCoordinator):
             type=ProxmoxType.LXC,
             node=node_name,
             status=api_status.get("status", UNDEFINED),
+            locked=bool(api_status.get("lock")),
             name=api_status.get("name", UNDEFINED),
             uptime=api_status.get("uptime", UNDEFINED),
             cpu=api_status.get("cpu", UNDEFINED),
