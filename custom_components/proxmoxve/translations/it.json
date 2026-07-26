@@ -181,6 +181,9 @@
             "health": {
                 "name": "Stato di salute"
             },
+            "locked": {
+                "name": "Bloccato"
+            },
             "update_avail": {
                 "name": "Aggiornamenti disponibili"
             }
@@ -203,6 +206,9 @@
             },
             "stop": {
                 "name": "Ferma"
+            },
+            "unlock": {
+                "name": "Sblocca"
             },
             "resume": {
                 "name": "Recupera"

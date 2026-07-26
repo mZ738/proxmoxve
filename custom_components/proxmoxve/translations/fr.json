@@ -181,6 +181,9 @@
             "health": {
                 "name": "Santé"
             },
+            "locked": {
+                "name": "Verrouillé"
+            },
             "update_avail": {
                 "name": "Mises à jour de paquets"
             }
@@ -203,6 +206,9 @@
             },
             "stop": {
                 "name": "Stopper"
+            },
+            "unlock": {
+                "name": "Déverrouiller"
             },
             "resume": {
                 "name": "Reprise"
