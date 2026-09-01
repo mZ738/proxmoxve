@@ -308,15 +308,17 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
                 ProxmoxType.QEMU,
                 self.resource_id,
             )
-        
+
         if api_status is None or "status" not in api_status:
             msg = f"QEMU {self.resource_id} unable to be found"
             raise UpdateFailed(msg)
-            
+
         guest_disk_used: int | UndefinedType = UNDEFINED
 
         try:
-            fsinfo_path = f"nodes/{node_name!s}/qemu/{self.resource_id}/agent/get-fsinfo"
+            fsinfo_path = (
+                f"nodes/{node_name!s}/qemu/{self.resource_id}/agent/get-fsinfo"
+            )
             fsinfo = await self.hass.async_add_executor_job(
                 poll_api,
                 self.hass,
@@ -354,8 +356,8 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
 
                 if filesystems_by_device:
                     guest_disk_used = sum(filesystems_by_device.values())
-                    
-        except Exception as ex:
+
+        except UpdateFailed:
             pass
 
         update_device_via(self, ProxmoxType.QEMU, node_name)

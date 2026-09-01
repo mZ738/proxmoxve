@@ -10,7 +10,8 @@ def resolve_disk_id(
     *,
     colliding_wwns: set[str] | None = None,
 ) -> str:
-    """Return a stable disk identifier.
+    """
+    Return a stable disk identifier.
 
     Prefer WWN when it is present, not ``unknown``, and not duplicated among
     disks on the same node. Fall back to serial, then by-id link, then devpath.
