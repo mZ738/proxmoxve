@@ -149,7 +149,15 @@ def post_api_command(
     try:
         if api_category is ProxmoxType.Proxmox:
             # Cluster-wide HA arm/disarm; not tied to a node or guest.
-            result = post_api(proxmox, f"cluster/ha/{command}")
+            # disarm-ha requires resource-mode (freeze|ignore); default to
+            # the safer "freeze" (HA services are locked in their current
+            # state, no automatic action) rather than "ignore" (HA tracking
+            # is fully suspended, allowing manual guest management during
+            # the disarmed window).
+            if command == ProxmoxCommand.DISARM_HA:
+                result = post_api(proxmox, f"cluster/ha/{command}?resource-mode=freeze")
+            else:
+                result = post_api(proxmox, f"cluster/ha/{command}")
         # START_ALL, STOP_ALL, WAKEONLAN are not part of status API
         elif api_category is ProxmoxType.Node and command in [
             ProxmoxCommand.START_ALL,
