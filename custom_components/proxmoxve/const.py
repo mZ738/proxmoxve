@@ -13,6 +13,9 @@ CONF_VMS = "vms"
 CONF_CONTAINERS = "containers"
 CONF_DISKS_ENABLE = "disks_enable"
 CONF_TASKS_ENABLE = "tasks_enable"
+CONF_GUEST_FILE_PATH = "guest_file_path"
+
+GUEST_FILE_READ_MAX_BYTES = 4096
 
 COORDINATORS = "coordinators"
 
@@ -88,6 +91,8 @@ class ProxmoxKeyAPIParse(StrEnum):
     DISK_USED = "disk_used"
     HEALTH = "health"
     LOCKED = "locked"
+    GUEST_FILE_CONTENT = "guest_file_content"
+    GUEST_FILE_PATH = "guest_file_path"
     NAME = "name"
     NETWORK_IN = "network_in"
     NETWORK_OUT = "network_out"

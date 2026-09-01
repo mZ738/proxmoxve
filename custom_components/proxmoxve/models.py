@@ -53,6 +53,8 @@ class ProxmoxVMData:
     network_out: float | UndefinedType
     status: str | UndefinedType
     locked: bool | UndefinedType
+    guest_file_content: str | UndefinedType
+    guest_file_path: str | UndefinedType
     uptime: int | UndefinedType
 
 
