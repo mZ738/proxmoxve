@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any, Final
@@ -226,10 +225,14 @@ DEVICE_ICONS: Final[dict[str, str]] = {
 
 def _get_chip_prefix(chip: str) -> str:
     """Extract the chip prefix from a full chip identifier for map lookup."""
-    for prefix, _ in CHIP_DEVICE_MAP.items():
+    for prefix in CHIP_DEVICE_MAP:
         if chip.startswith(prefix):
             return prefix
-    fallback = chip.split("-")[0] if "-" in chip else chip.split(" ")[0]
+    fallback = (
+        chip.split("-", maxsplit=1)[0]
+        if "-" in chip
+        else chip.split(" ", maxsplit=1)[0]
+    )
     return fallback.lower()
 
 
@@ -241,7 +244,9 @@ def _classify_sensor_key(sensor_key: str) -> dict:
     sensor_lower = sensor.lower()
 
     chip_prefix = _get_chip_prefix(chip)
-    device_type = CHIP_DEVICE_MAP.get(chip_prefix, chip_prefix.capitalize() or "Unknown")
+    device_type = CHIP_DEVICE_MAP.get(
+        chip_prefix, chip_prefix.capitalize() or "Unknown"
+    )
 
     chip_labels = SENSOR_LABEL_MAP.get(chip_prefix, {})
     known_label = None
