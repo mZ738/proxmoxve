@@ -1,4 +1,8 @@
 # Proxmox VE Custom Integration for Home Assistant
+
+> [!NOTE]
+> This is a fork of [dougiteixeira/proxmoxve](https://github.com/dougiteixeira/proxmoxve), continued here since the original repository has been inactive for a while. All credit for the original integration goes to [@dougiteixeira](https://github.com/dougiteixeira) and its contributors.
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/5b5a8c5b-885b-4233-a858-2e78b97d8c74">
   <img src="https://github.com/dougiteixeira/proxmoxve/assets/31328123/dfec7426-852d-41ea-b6c1-9bfd8cd1e8a8">
@@ -14,7 +18,7 @@ After configuring this integration, the following information is available:
  - Binary sensor entities with the status of node and selected virtual machines/containers.
  - Sensor entities of the selected node and virtual machines/containers. Some sensors are created disabled by default, you can enable them by accessing the entity's configuration.
  - **Failed task monitoring sensors** that track failed tasks from the last 24 hours on selected nodes, showing the count of failures and details about recent failed tasks.
- - Entities button to control selected virtual machines/containers (see about Proxmox user permissions below). By default, the entities buttons to control virtual machines/containers are created disabled, [see how to enable them here](https://github.com/dougiteixeira/proxmoxve/#disabled-entities).
+ - Entities button to control selected virtual machines/containers (see about Proxmox user permissions below). By default, the entities buttons to control virtual machines/containers are created disabled, [see how to enable them here](#disabled-entities).
 
 ### Failed Task Monitoring
 
@@ -94,7 +98,7 @@ Because of that, this uses a **separate user or API token** from the main integr
 Only relevant if you run a Proxmox **cluster with HA-manager configured** — on a standalone node there are no HA resources to arm/disarm or report on.
 
 > [!IMPORTANT]  
-> See the section on Proxmox user permissions [here](https://github.com/dougiteixeira/proxmoxve#proxmox-permissions).
+> See the section on Proxmox user permissions [here](#proxmox-permissions).
 
 ## Install
 
@@ -104,17 +108,17 @@ Have [HACS](https://hacs.xyz/) installed, this will allow you to update easily.
 
 * Adding Proxmox VE to HACS can be using this button:
 
-[![image](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=dougiteixeira&repository=proxmoxve&category=integration)
+[![image](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mZ738&repository=proxmoxve&category=integration)
 
 > [!NOTE]
-> If the button above doesn't work, add `https://github.com/dougiteixeira/proxmoxve` as a custom repository of type Integration in HACS.
+> If the button above doesn't work, add `https://github.com/mZ738/proxmoxve` as a custom repository of type Integration in HACS.
 
 * Click Install on the `Proxmox VE` integration.
 * Restart the Home Assistant.
 
 <details><summary>Manual installation</summary>
  
-* Copy `proxmoxve`  folder from [latest release](https://github.com/dougiteixeira/proxmoxve/releases/latest) to [`custom_components` folder](https://developers.home-assistant.io/docs/creating_integration_file_structure/#where-home-assistant-looks-for-integrations) in your config directory.
+* Copy `proxmoxve`  folder from [latest release](https://github.com/mZ738/proxmoxve/releases/latest) to [`custom_components` folder](https://developers.home-assistant.io/docs/creating_integration_file_structure/#where-home-assistant-looks-for-integrations) in your config directory.
 * Restart the Home Assistant.
 </details>
 
@@ -334,4 +338,4 @@ Next translate a string:
 
 ### Adding a new language
 
-[Create an Issue](https://github.com/dougiteixeira/proxmoxve/issues/new?template=new_language_request.yml&title=New+language) requesting a new language. We will do the necessary work to add the new translation to the integration and Crowdin site, when it's ready for you to contribute we'll comment on the issue you raised.
+[Create an Issue](https://github.com/mZ738/proxmoxve/issues/new?template=new_language_request.yml&title=New+language) requesting a new language. We will do the necessary work to add the new translation to the integration and Crowdin site, when it's ready for you to contribute we'll comment on the issue you raised.
