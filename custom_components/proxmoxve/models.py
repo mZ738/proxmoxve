@@ -31,6 +31,8 @@ class ProxmoxNodeData:
     qemu_on_list: list
     lxc_on: int
     lxc_on_list: list
+    sensors: dict[str, float] | None = None
+    sensors_raw: str | None = None
 
 
 @dataclasses.dataclass
@@ -50,6 +52,7 @@ class ProxmoxVMData:
     network_in: float | UndefinedType
     network_out: float | UndefinedType
     status: str | UndefinedType
+    locked: bool | UndefinedType
     uptime: int | UndefinedType
 
 
@@ -69,6 +72,7 @@ class ProxmoxLXCData:
     network_in: float | UndefinedType
     network_out: float | UndefinedType
     status: str | UndefinedType
+    locked: bool | UndefinedType
     swap_total: float | UndefinedType
     swap_free: float | UndefinedType
     swap_used: float | UndefinedType

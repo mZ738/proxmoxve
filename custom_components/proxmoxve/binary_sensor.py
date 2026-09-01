@@ -94,6 +94,12 @@ PROXMOX_BINARYSENSOR_VM: Final[tuple[ProxmoxBinarySensorEntityDescription, ...]]
         api_category=ProxmoxType.QEMU,
         translation_key="health",
     ),
+    ProxmoxBinarySensorEntityDescription(
+        key=ProxmoxKeyAPIParse.LOCKED,
+        name="Locked",
+        on_value=[True],
+        translation_key="locked",
+    ),
 )
 
 

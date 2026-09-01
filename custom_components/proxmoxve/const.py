@@ -67,6 +67,7 @@ class ProxmoxCommand(StrEnum):
     STOP_ALL = "stopall"
     HIBERNATE = "hibernate"
     WAKEONLAN = "wakeonlan"
+    UNLOCK = "unlock"
 
 
 class ProxmoxKeyAPIParse(StrEnum):
@@ -86,6 +87,7 @@ class ProxmoxKeyAPIParse(StrEnum):
     DISK_TOTAL = "disk_total"
     DISK_USED = "disk_used"
     HEALTH = "health"
+    LOCKED = "locked"
     NAME = "name"
     NETWORK_IN = "network_in"
     NETWORK_OUT = "network_out"

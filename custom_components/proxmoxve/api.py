@@ -110,6 +110,17 @@ def post_api(
     return api_result
 
 
+def put_api(
+    proxmox: ProxmoxAPI,
+    api_path: str,
+    **kwargs: Any,
+) -> dict[str, Any] | None:
+    """Put data to Proxmox API."""
+    api_result = proxmox.put(api_path, **kwargs)
+    LOGGER.debug("API PUT - %s: %s", api_path, api_result)
+    return api_result
+
+
 def post_api_command(
     self,
     proxmox_client: ProxmoxClient,
@@ -147,21 +158,34 @@ def post_api_command(
                 proxmox,
                 f"nodes/{node}/{api_category}/{vm_id}/status/{ProxmoxCommand.SUSPEND}?todisk=1",
             )
+        elif command == ProxmoxCommand.UNLOCK:
+            # Unlock is not part of the status API; it removes the config
+            # lock (equivalent to `pct unlock` / `qm unlock`). QEMU refuses to
+            # edit a locked guest's config unless skiplock=1 is passed (allowed
+            # for root@pam only); the LXC config endpoint has no skiplock
+            # parameter and rejects it, so it is sent for QEMU only.
+            extra = {"skiplock": 1} if api_category is ProxmoxType.QEMU else {}
+            result = put_api(
+                proxmox,
+                f"nodes/{node}/{api_category}/{vm_id}/config",
+                delete="lock",
+                **extra,
+            )
         else:
             result = post_api(
                 proxmox, f"nodes/{node}/{api_category}/{vm_id}/status/{command}"
             )
 
     except ResourceException as error:
+        if api_category is ProxmoxType.Node:
+            resource = f"{api_category.capitalize()} {node}"
+        else:
+            resource = f"{api_category.upper()} {vm_id}"
         if error.status_code == 403:
             permissions = str(error).split("(")[1].split(",")
             permission_check = (
                 f"['perm','{permissions[0]}',[{permissions[1].strip().strip(')')}]]"
             )
-            if api_category is ProxmoxType.Node:
-                resource = f"{api_category.capitalize()} {node}"
-            elif api_category in (ProxmoxType.QEMU, ProxmoxType.LXC):
-                resource = f"{api_category.upper()} {vm_id}"
             ir.create_issue(
                 self.hass,
                 DOMAIN,
@@ -176,10 +200,13 @@ def post_api_command(
                     "command": command,
                 },
             )
-            msg = f"Proxmox {resource} {command} error - {error}"
-            raise HomeAssistantError(
-                msg,
-            ) from error
+        # Surface every API error (e.g. a still-present lock, or skiplock
+        # being rejected for a non-root user) instead of silently swallowing
+        # non-403 responses, which made failed commands look successful.
+        msg = f"Proxmox {resource} {command} error - {error}"
+        raise HomeAssistantError(
+            msg,
+        ) from error
 
     except ConnectTimeout as error:
         msg = f"Proxmox {resource} {command} error - {error}"
