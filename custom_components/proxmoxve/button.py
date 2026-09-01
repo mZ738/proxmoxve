@@ -16,6 +16,7 @@ from .const import (
     COORDINATORS,
     LOGGER,
     PROXMOX_CLIENT,
+    PROXMOX_HA_ADMIN_CLIENT,
     ProxmoxCommand,
     ProxmoxType,
 )
@@ -150,6 +151,23 @@ PROXMOX_BUTTON_VM: Final[tuple[ProxmoxButtonEntityDescription, ...]] = (
     ),
 )
 
+PROXMOX_BUTTON_CLUSTER: Final[tuple[ProxmoxButtonEntityDescription, ...]] = (
+    ProxmoxButtonEntityDescription(
+        key=ProxmoxCommand.DISARM_HA,
+        icon="mdi:shield-off-outline",
+        name="Disarm HA",
+        entity_registry_enabled_default=False,
+        translation_key="disarm_ha",
+    ),
+    ProxmoxButtonEntityDescription(
+        key=ProxmoxCommand.ARM_HA,
+        icon="mdi:shield-check-outline",
+        name="Arm HA",
+        entity_registry_enabled_default=False,
+        translation_key="arm_ha",
+    ),
+)
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -249,6 +267,26 @@ async def async_setup_entry(
                     )
                 )
 
+    proxmox_ha_admin_client = config_entry.runtime_data.get(PROXMOX_HA_ADMIN_CLIENT)
+    ha_resources_coordinator = coordinators.get(f"{ProxmoxType.Proxmox}_ha_resources")
+    if proxmox_ha_admin_client is not None and ha_resources_coordinator is not None:
+        for description in PROXMOX_BUTTON_CLUSTER:
+            buttons.append(
+                create_button(
+                    coordinator=ha_resources_coordinator,
+                    info_device=device_info(
+                        hass=hass,
+                        config_entry=config_entry,
+                        api_category=ProxmoxType.Proxmox,
+                    ),
+                    description=description,
+                    resource_id="cluster",
+                    proxmox_client=proxmox_ha_admin_client,
+                    api_category=ProxmoxType.Proxmox,
+                    config_entry=config_entry,
+                )
+            )
+
     async_add_entities(buttons)
 
 
@@ -298,7 +336,11 @@ class ProxmoxButtonEntity(ProxmoxEntity, ButtonEntity):
 
         def _button_press() -> None:
             """Post start command & tell HA state is on."""
-            if api_category == ProxmoxType.Node:
+            if api_category == ProxmoxType.Proxmox:
+                # Cluster-wide HA arm/disarm; not tied to a node or guest.
+                node = None
+                vm_id = None
+            elif api_category == ProxmoxType.Node:
                 node = resource_id
                 vm_id = None
             else:

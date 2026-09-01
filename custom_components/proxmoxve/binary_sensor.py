@@ -30,6 +30,8 @@ if TYPE_CHECKING:
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+    from .coordinator import ProxmoxHAResourcesCoordinator
+
 
 @dataclass(frozen=True, kw_only=True)
 class ProxmoxBinarySensorEntityDescription(
@@ -100,6 +102,14 @@ PROXMOX_BINARYSENSOR_VM: Final[tuple[ProxmoxBinarySensorEntityDescription, ...]]
         on_value=[True],
         translation_key="locked",
     ),
+)
+
+PROXMOX_BINARYSENSOR_HA_MANAGED: Final[ProxmoxBinarySensorEntityDescription] = (
+    ProxmoxBinarySensorEntityDescription(
+        key="ha_managed",
+        name="HA managed",
+        translation_key="ha_managed",
+    )
 )
 
 
@@ -230,6 +240,7 @@ async def async_setup_binary_sensors_qemu(
     sensors = []
 
     coordinators = config_entry.runtime_data[COORDINATORS]
+    ha_resources_coordinator = coordinators.get(f"{ProxmoxType.Proxmox}_ha_resources")
 
     for vm_id in config_entry.data[CONF_QEMU]:
         if f"{ProxmoxType.QEMU}_{vm_id}" in coordinators:
@@ -258,6 +269,22 @@ async def async_setup_binary_sensors_qemu(
                         )
                     )
 
+        if ha_resources_coordinator is not None:
+            sensors.append(
+                ProxmoxHAManagedBinarySensorEntity(
+                    coordinator=ha_resources_coordinator,
+                    unique_id=f"{config_entry.entry_id}_{vm_id}_ha_managed",
+                    info_device=device_info(
+                        hass=hass,
+                        config_entry=config_entry,
+                        api_category=ProxmoxType.QEMU,
+                        resource_id=vm_id,
+                    ),
+                    description=PROXMOX_BINARYSENSOR_HA_MANAGED,
+                    sid=f"vm:{vm_id}",
+                )
+            )
+
     return sensors
 
 
@@ -269,6 +296,7 @@ async def async_setup_binary_sensors_lxc(
     sensors = []
 
     coordinators = config_entry.runtime_data[COORDINATORS]
+    ha_resources_coordinator = coordinators.get(f"{ProxmoxType.Proxmox}_ha_resources")
 
     for container_id in config_entry.data[CONF_LXC]:
         if f"{ProxmoxType.LXC}_{container_id}" in coordinators:
@@ -296,6 +324,22 @@ async def async_setup_binary_sensors_lxc(
                             resource_id=container_id,
                         )
                     )
+
+        if ha_resources_coordinator is not None:
+            sensors.append(
+                ProxmoxHAManagedBinarySensorEntity(
+                    coordinator=ha_resources_coordinator,
+                    unique_id=f"{config_entry.entry_id}_{container_id}_ha_managed",
+                    info_device=device_info(
+                        hass=hass,
+                        config_entry=config_entry,
+                        api_category=ProxmoxType.LXC,
+                        resource_id=container_id,
+                    ),
+                    description=PROXMOX_BINARYSENSOR_HA_MANAGED,
+                    sid=f"ct:{container_id}",
+                )
+            )
 
     return sensors
 
@@ -346,6 +390,45 @@ class ProxmoxBinarySensorEntity(ProxmoxEntity, BinarySensorEntity):
             return data_value not in self.entity_description.on_value
 
         return data_value in self.entity_description.on_value
+
+    @property
+    def available(self) -> bool:
+        """Return sensor availability."""
+        return super().available and self.coordinator.data is not None
+
+
+class ProxmoxHAManagedBinarySensorEntity(ProxmoxEntity, BinarySensorEntity):
+    """
+    Whether a guest is managed by the Proxmox HA stack.
+
+    Backed by the shared ProxmoxHAResourcesCoordinator (a set of resource
+    sids) rather than a per-guest coordinator, so `is_on` checks membership
+    directly instead of the generic `getattr(data, key)` lookup the other
+    binary sensors use.
+    """
+
+    entity_description: ProxmoxBinarySensorEntityDescription
+
+    def __init__(
+        self,
+        coordinator: ProxmoxHAResourcesCoordinator,
+        unique_id: str,
+        info_device: DeviceInfo,
+        description: ProxmoxBinarySensorEntityDescription,
+        sid: str,
+    ) -> None:
+        """Create the HA-managed binary sensor for a VM or container."""
+        super().__init__(coordinator, unique_id, description)
+
+        self._attr_device_info = info_device
+        self._sid = sid
+
+    @property
+    def is_on(self) -> bool:
+        """Return whether this guest's sid is in the HA-managed resources."""
+        if (data := self.coordinator.data) is None:
+            return False
+        return self._sid in data
 
     @property
     def available(self) -> bool:

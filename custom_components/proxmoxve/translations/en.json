@@ -124,7 +124,8 @@
         "menu": {
           "menu_options": {
             "host_auth": "Change host authentication information",
-            "change_expose": "Add or remove Nodes, VMs, Containers or Storages"
+            "change_expose": "Add or remove Nodes, VMs, Containers or Storages",
+            "cluster_ha_auth": "Optional: cluster HA administration (advanced)"
           }
         },
         "host_auth": {
@@ -136,6 +137,19 @@
               "verify_ssl": "Verify SSL certificate"
           },
           "description": "Proxmox host information"
+        },
+        "cluster_ha_auth": {
+          "description": "Optional and separate from the main credentials above. Enables the Arm HA / Disarm HA buttons and a per-VM/CT \"HA managed\" sensor. These require Sys.Console and Sys.Audit permissions on the Proxmox root path ('/') — significantly broader than anything else this integration needs, and enough to affect the whole cluster's HA fencing behavior. Only fill this in if you understand and accept that risk; leave every field empty to leave these features disabled.",
+          "data": {
+            "ha_admin_username": "Username",
+            "ha_admin_token_name": "Token name",
+            "ha_admin_password": "Password or token value",
+            "ha_admin_realm": "Realm"
+          },
+          "data_description": {
+            "ha_admin_username": "Leave empty (along with the fields below) to disable the Arm/Disarm HA buttons and the HA managed sensor.",
+            "ha_admin_password": "Needs Sys.Console (arm/disarm) and Sys.Audit (HA resource list) on '/' — not the scoped permissions recommended for the main integration user."
+          }
         },
         "change_expose": {
           "description": "Select the Proxmox instance nodes and Virtual Machines (QEMU) and Containers (LXC) you want to expose",
@@ -188,6 +202,9 @@
         },
         "update_avail": {
           "name": "Updates packages"
+        },
+        "ha_managed": {
+          "name": "HA managed"
         }
       },
       "button": {
@@ -223,6 +240,12 @@
         },
         "wakeonlan": {
           "name": "Wake-on-LAN"
+        },
+        "arm_ha": {
+          "name": "Arm HA"
+        },
+        "disarm_ha": {
+          "name": "Disarm HA"
         }
       },
       "sensor": {

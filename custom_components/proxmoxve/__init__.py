@@ -43,6 +43,10 @@ from .api import ProxmoxClient, get_api
 from .const import (
     CONF_CONTAINERS,
     CONF_DISKS_ENABLE,
+    CONF_HA_ADMIN_PASSWORD,
+    CONF_HA_ADMIN_REALM,
+    CONF_HA_ADMIN_TOKEN_NAME,
+    CONF_HA_ADMIN_USERNAME,
     CONF_LXC,
     CONF_NODE,
     CONF_NODES,
@@ -60,11 +64,13 @@ from .const import (
     INTEGRATION_TITLE,
     LOGGER,
     PROXMOX_CLIENT,
+    PROXMOX_HA_ADMIN_CLIENT,
     VERSION_REMOVE_YAML,
     ProxmoxType,
 )
 from .coordinator import (
     ProxmoxDiskCoordinator,
+    ProxmoxHAResourcesCoordinator,
     ProxmoxLXCCoordinator,
     ProxmoxNodeCoordinator,
     ProxmoxQEMUCoordinator,
@@ -755,10 +761,67 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
                 },
             )
 
+    # Optional, separate higher-privilege credentials for cluster-wide HA
+    # arm/disarm (needs Sys.Console on '/') and HA-resource membership
+    # (needs Sys.Audit on '/') — both broader than the least-privilege scopes
+    # the rest of the integration needs, so this stays opt-in and its failure
+    # must not break the primary integration setup.
+    proxmox_ha_admin_client = None
+    ha_admin_user = config_entry.data.get(CONF_HA_ADMIN_USERNAME)
+    ha_admin_password = config_entry.data.get(CONF_HA_ADMIN_PASSWORD)
+    if ha_admin_user and ha_admin_password:
+        candidate_client = ProxmoxClient(
+            host=host,
+            port=port,
+            user=ha_admin_user,
+            token_name=config_entry.data.get(CONF_HA_ADMIN_TOKEN_NAME, ""),
+            realm=config_entry.data.get(CONF_HA_ADMIN_REALM, DEFAULT_REALM),
+            password=ha_admin_password,
+            verify_ssl=verify_ssl,
+        )
+        try:
+            await hass.async_add_executor_job(candidate_client.build_client)
+        except (
+            AuthenticationError,
+            SSLError,
+            ConnectTimeout,
+            RetryError,
+            connError,
+            ResourceException,
+        ):
+            LOGGER.exception(
+                "Unable to authenticate with the optional cluster HA admin "
+                "credentials; the Arm/Disarm HA buttons and HA managed "
+                "sensors will not be created"
+            )
+        else:
+            proxmox_ha_admin_client = candidate_client
+
+    ha_resources_coordinator = None
+    if proxmox_ha_admin_client is not None:
+        proxmox_ha_admin = await hass.async_add_executor_job(
+            proxmox_ha_admin_client.get_api_client
+        )
+        ha_resources_coordinator = ProxmoxHAResourcesCoordinator(
+            hass=hass,
+            proxmox=proxmox_ha_admin,
+        )
+        await ha_resources_coordinator.async_refresh()
+        coordinators[f"{ProxmoxType.Proxmox}_ha_resources"] = ha_resources_coordinator
+
     config_entry.runtime_data = {
         PROXMOX_CLIENT: proxmox_client,
+        PROXMOX_HA_ADMIN_CLIENT: proxmox_ha_admin_client,
         COORDINATORS: coordinators,
     }
+
+    if proxmox_ha_admin_client is not None:
+        device_info(
+            hass=hass,
+            config_entry=config_entry,
+            api_category=ProxmoxType.Proxmox,
+            create=True,
+        )
 
     for node in nodes_add_device:
         device_info(
@@ -817,7 +880,14 @@ def device_info(
     proxmox_version = None
     manufacturer = None
     serial_number = None
-    if api_category in (ProxmoxType.QEMU, ProxmoxType.LXC):
+    if api_category is ProxmoxType.Proxmox:
+        name = "Proxmox Cluster"
+        identifier = f"{config_entry.entry_id}_cluster"
+        url = f"https://{host}:{port}/#v1:0:=cluster/ha"
+        via_device = None
+        model = "Cluster"
+
+    elif api_category in (ProxmoxType.QEMU, ProxmoxType.LXC):
         coordinator = coordinators[f"{api_category}_{resource_id}"]
         if (coordinator_data := coordinator.data) is not None:
             vm_name = coordinator_data.name

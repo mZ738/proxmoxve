@@ -11,6 +11,7 @@ from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectTimeout
 
 from .const import (
+    CONF_HA_ADMIN_USERNAME,
     DEFAULT_PORT,
     DEFAULT_REALM,
     DEFAULT_VERIFY_SSL,
@@ -138,14 +139,19 @@ def post_api_command(
         msg = "Invalid Command"
         raise ValueError(msg)
 
-    if api_category is ProxmoxType.Node:
+    if api_category is ProxmoxType.Proxmox:
+        issue_id = f"{self.config_entry.entry_id}_cluster_command_forbiden"
+    elif api_category is ProxmoxType.Node:
         issue_id = f"{self.config_entry.entry_id}_{node}_command_forbiden"
     elif api_category in (ProxmoxType.QEMU, ProxmoxType.LXC):
         issue_id = f"{self.config_entry.entry_id}_{vm_id}_command_forbiden"
 
     try:
+        if api_category is ProxmoxType.Proxmox:
+            # Cluster-wide HA arm/disarm; not tied to a node or guest.
+            result = post_api(proxmox, f"cluster/ha/{command}")
         # START_ALL, STOP_ALL, WAKEONLAN are not part of status API
-        if api_category is ProxmoxType.Node and command in [
+        elif api_category is ProxmoxType.Node and command in [
             ProxmoxCommand.START_ALL,
             ProxmoxCommand.STOP_ALL,
             ProxmoxCommand.WAKEONLAN,
@@ -177,7 +183,9 @@ def post_api_command(
             )
 
     except ResourceException as error:
-        if api_category is ProxmoxType.Node:
+        if api_category is ProxmoxType.Proxmox:
+            resource = "Cluster HA"
+        elif api_category is ProxmoxType.Node:
             resource = f"{api_category.capitalize()} {node}"
         else:
             resource = f"{api_category.upper()} {vm_id}"
@@ -195,7 +203,11 @@ def post_api_command(
                 translation_key="resource_command_forbiden",
                 translation_placeholders={
                     "resource": resource,
-                    "user": self.config_entry.data[CONF_USERNAME],
+                    "user": (
+                        self.config_entry.data.get(CONF_HA_ADMIN_USERNAME)
+                        if api_category is ProxmoxType.Proxmox
+                        else self.config_entry.data[CONF_USERNAME]
+                    ),
                     "permission": permission_check,
                     "command": command,
                 },
