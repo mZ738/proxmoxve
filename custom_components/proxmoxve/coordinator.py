@@ -30,6 +30,7 @@ from requests.exceptions import (
 from .api import get_api
 from .const import (
     CONF_GUEST_FILE_PATH,
+    CONF_HA_ADMIN_USERNAME,
     CONF_NODE,
     DOMAIN,
     GUEST_FILE_READ_MAX_BYTES,
@@ -102,6 +103,53 @@ class ProxmoxCoordinator(
     ]
 ):
     """Proxmox VE data update coordinator."""
+
+
+class ProxmoxHAResourcesCoordinator(DataUpdateCoordinator[set[str]]):
+    """
+    Track which guests are managed by the Proxmox HA stack.
+
+    Cluster-wide (`Sys.Audit` on `/`), so it uses the optional HA-admin
+    client rather than the primary least-privilege one, and is shared by
+    every guest's "HA managed" binary sensor instead of being polled once
+    per guest.
+    """
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        proxmox: ProxmoxAPI,
+    ) -> None:
+        """Initialize the Proxmox HA resources coordinator."""
+        super().__init__(
+            hass,
+            LOGGER,
+            name="proxmox_coordinator_ha_resources",
+            update_interval=timedelta(seconds=UPDATE_INTERVAL),
+        )
+
+        self.hass = hass
+        self.config_entry: ConfigEntry = self.config_entry
+        self.proxmox = proxmox
+        self.resource_id = "ha_resources"
+        self.api_category = ProxmoxType.Proxmox
+
+    async def _async_update_data(self) -> set[str]:
+        """Return the set of HA-managed resource sids (e.g. 'vm:100', 'ct:105')."""
+        resources = await self.hass.async_add_executor_job(
+            poll_api,
+            self.hass,
+            self.config_entry,
+            self.proxmox,
+            "cluster/ha/resources",
+            ProxmoxType.Proxmox,
+            self.resource_id,
+        )
+        return {
+            resource["sid"]
+            for resource in (resources or [])
+            if isinstance(resource, dict) and "sid" in resource
+        }
 
 
 class ProxmoxNodeCoordinator(ProxmoxCoordinator):
@@ -1167,6 +1215,8 @@ def poll_api(
                 return f"['perm','/nodes/{resource_id}',['Sys.Audit']]"
             case ProxmoxType.Tasks:
                 return f"['perm','/nodes/{resource_id}',['Sys.Audit']]"
+            case ProxmoxType.Proxmox:
+                return "['perm','/',['Sys.Audit']]"
             case _:
                 return "Unmapped"
 
@@ -1195,7 +1245,11 @@ def poll_api(
                 translation_key="resource_exception_forbiden",
                 translation_placeholders={
                     "resource": f"{api_category.capitalize()} {resource_id.replace(f'{ProxmoxType.Update.capitalize()} ', '')}",
-                    "user": config_entry.data[CONF_USERNAME],
+                    "user": (
+                        config_entry.data.get(CONF_HA_ADMIN_USERNAME)
+                        if api_category is ProxmoxType.Proxmox
+                        else config_entry.data[CONF_USERNAME]
+                    ),
                     "permission": permission_to_resource(
                         api_category,
                         resource_id.replace(f"{ProxmoxType.Update.capitalize()} ", ""),

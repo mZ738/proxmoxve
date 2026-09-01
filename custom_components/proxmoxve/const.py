@@ -14,6 +14,10 @@ CONF_CONTAINERS = "containers"
 CONF_DISKS_ENABLE = "disks_enable"
 CONF_TASKS_ENABLE = "tasks_enable"
 CONF_GUEST_FILE_PATH = "guest_file_path"
+CONF_HA_ADMIN_USERNAME = "ha_admin_username"
+CONF_HA_ADMIN_TOKEN_NAME = "ha_admin_token_name"
+CONF_HA_ADMIN_PASSWORD = "ha_admin_password"
+CONF_HA_ADMIN_REALM = "ha_admin_realm"
 
 GUEST_FILE_READ_MAX_BYTES = 4096
 
@@ -36,6 +40,7 @@ CONF_VMS = "vms"
 CONF_STORAGE = "storage"
 
 PROXMOX_CLIENT = "proxmox_client"
+PROXMOX_HA_ADMIN_CLIENT = "proxmox_ha_admin_client"
 
 INTEGRATION_TITLE = "Proxmox VE"
 VERSION_REMOVE_YAML = "2025.1"
@@ -71,6 +76,8 @@ class ProxmoxCommand(StrEnum):
     HIBERNATE = "hibernate"
     WAKEONLAN = "wakeonlan"
     UNLOCK = "unlock"
+    ARM_HA = "arm-ha"
+    DISARM_HA = "disarm-ha"
 
 
 class ProxmoxKeyAPIParse(StrEnum):

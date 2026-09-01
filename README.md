@@ -79,6 +79,20 @@ For QEMU virtual machines with the [QEMU Guest Agent](https://pve.proxmox.com/wi
 - Content is capped at 4 KiB per read; the sensor state is further truncated to 255 characters (Home Assistant's state length limit), with the full (capped) content available as the `guest_file_content` attribute.
 - QEMU only — LXC containers have no equivalent guest-agent file-read API.
 
+### Cluster HA Administration (Advanced, Optional)
+
+Two features let you interact with the Proxmox HA (High Availability) stack, gated behind a **separate, optional** set of credentials:
+
+- **Arm HA / Disarm HA buttons**: cluster-wide equivalents of `ha-manager crm-command arm-ha` / `disarm-ha`, letting you pause HA fencing for planned maintenance (e.g. before/after a node reboot script) and resume it afterwards. Disabled by default even once configured — enable them explicitly like other advanced entities.
+- **"HA managed" sensor**: a per-VM/CT binary sensor showing whether that guest is currently a Proxmox HA resource.
+
+> [!CAUTION]
+> These need **`Sys.Console`** (arm/disarm) and **`Sys.Audit`** (HA resource list) on the Proxmox **root path (`/`)** — cluster-wide permissions, well beyond the scoped, per-node/per-VM permissions the rest of this integration recommends. `Sys.Console` in particular is normally associated with shell/console access. Only configure this if you understand and accept that risk.
+
+Because of that, this uses a **separate user or API token** from the main integration credentials, configured via the integration options (`Optional: cluster HA administration (advanced)`). Leave every field empty (the default) to keep these features disabled — the rest of the integration is unaffected either way. A failure to authenticate with these optional credentials only disables these features; it does not break the rest of the integration.
+
+Only relevant if you run a Proxmox **cluster with HA-manager configured** — on a standalone node there are no HA resources to arm/disarm or report on.
+
 > [!IMPORTANT]  
 > See the section on Proxmox user permissions [here](https://github.com/dougiteixeira/proxmoxve#proxmox-permissions).
 
@@ -207,6 +221,7 @@ Below is a summary of the permissions for each integration feature. I suggest yo
 |Perform commands on the node (shutdown, restart, start all, shutdown all)|Management permission|HomeAssistant.NodePowerMgmt|Sys.PowerMgmt|
 |Get information about available package updates to display on sensors (integration does not trigger the update)|Management permission|HomeAssistant.Update|Sys.Modify|
 |Perform commands on VM/CT (start, shutdown, restart, suspend, resume and hibernate)|Management permission|HomeAssistant.VMPowerMgmt|VM.PowerMgmt|
+|**(Optional, separate user/token — see [Cluster HA Administration](#cluster-ha-administration-advanced-optional))** Arm/Disarm HA and read the HA-managed resource list, root-scoped (`/`)|Cluster-wide management permission|HomeAssistant.ClusterHA|Sys.Console, Sys.Audit|
 
 ### Create Home Assistant Group
 
