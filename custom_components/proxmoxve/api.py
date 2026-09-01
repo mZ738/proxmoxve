@@ -7,6 +7,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
 from proxmoxer import ProxmoxAPI
 from proxmoxer.core import ResourceException
+from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectTimeout
 
 from .const import (
@@ -72,6 +73,17 @@ class ProxmoxClient:
                 verify_ssl=self._verify_ssl,
                 timeout=30,
             )
+
+        adapter = HTTPAdapter(
+            pool_connections=32,
+            pool_maxsize=32,
+            max_retries=0,
+            pool_block=False,
+        )
+
+        # proxmoxer exposes no public accessor for the underlying requests session.
+        session = self._proxmox._store["session"]  # noqa: SLF001
+        session.mount("https://", adapter)
 
     def get_api_client(self) -> ProxmoxAPI:
         """Return the ProxmoxAPI client."""
