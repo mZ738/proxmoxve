@@ -70,6 +70,15 @@ Each sensor is automatically classified:
 
 Sensors are created under the corresponding Node device in Home Assistant and are marked as `diagnostic`.
 
+### Guest File Content Sensor
+
+For QEMU virtual machines with the [QEMU Guest Agent](https://pve.proxmox.com/wiki/Qemu-guest-agent) installed and running, you can configure an absolute file path (in the integration options) that will be read from inside each tracked VM and exposed as a sensor.
+
+- Configured once for all tracked QEMU VMs, via the integration options (`Guest file path to monitor`). Leave empty to disable (default).
+- Only VMs where the file can actually be read (guest agent running, file exists and is accessible) get the sensor; it is silently skipped otherwise.
+- Content is capped at 4 KiB per read; the sensor state is further truncated to 255 characters (Home Assistant's state length limit), with the full (capped) content available as the `guest_file_content` attribute.
+- QEMU only — LXC containers have no equivalent guest-agent file-read API.
+
 > [!IMPORTANT]  
 > See the section on Proxmox user permissions [here](https://github.com/dougiteixeira/proxmoxve#proxmox-permissions).
 

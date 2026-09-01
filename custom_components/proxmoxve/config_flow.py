@@ -26,6 +26,7 @@ from .api import ProxmoxClient, get_api
 from .const import (
     CONF_CONTAINERS,
     CONF_DISKS_ENABLE,
+    CONF_GUEST_FILE_PATH,
     CONF_LXC,
     CONF_NODE,
     CONF_NODES,
@@ -297,6 +298,14 @@ class ProxmoxOptionsFlowHandler(config_entries.OptionsFlow):
                                 CONF_TASKS_ENABLE, True
                             ),
                         ): selector.BooleanSelector(),
+                        vol.Optional(
+                            CONF_GUEST_FILE_PATH,
+                            description={
+                                "suggested_value": self.config_entry.options.get(
+                                    CONF_GUEST_FILE_PATH, ""
+                                )
+                            },
+                        ): selector.TextSelector(),
                     }
                 ),
             )
@@ -319,6 +328,7 @@ class ProxmoxOptionsFlowHandler(config_entries.OptionsFlow):
         options_data = {
             CONF_DISKS_ENABLE: user_input.get(CONF_DISKS_ENABLE),
             CONF_TASKS_ENABLE: user_input.get(CONF_TASKS_ENABLE),
+            CONF_GUEST_FILE_PATH: user_input.get(CONF_GUEST_FILE_PATH, "").strip(),
         }
 
         self.hass.config_entries.async_update_entry(

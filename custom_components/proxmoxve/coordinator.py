@@ -6,6 +6,7 @@ import json
 import time
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
 from homeassistant.const import CONF_HOST, CONF_USERNAME
@@ -27,7 +28,15 @@ from requests.exceptions import (
 )
 
 from .api import get_api
-from .const import CONF_NODE, DOMAIN, LOGGER, UPDATE_INTERVAL, ProxmoxType
+from .const import (
+    CONF_GUEST_FILE_PATH,
+    CONF_NODE,
+    DOMAIN,
+    GUEST_FILE_READ_MAX_BYTES,
+    LOGGER,
+    UPDATE_INTERVAL,
+    ProxmoxType,
+)
 from .disk import disk_matches_id
 from .models import (
     ProxmoxDiskData,
@@ -411,6 +420,32 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
         except UpdateFailed:
             pass
 
+        guest_file_path = self.config_entry.options.get(CONF_GUEST_FILE_PATH)
+        guest_file_content: str | UndefinedType = UNDEFINED
+
+        if guest_file_path:
+            try:
+                file_read_path = (
+                    f"nodes/{node_name!s}/qemu/{self.resource_id}/agent/file-read"
+                    f"?file={quote(guest_file_path, safe='')}"
+                    f"&count={GUEST_FILE_READ_MAX_BYTES}&decode=1"
+                )
+                file_result = await self.hass.async_add_executor_job(
+                    poll_api,
+                    self.hass,
+                    self.config_entry,
+                    self.proxmox,
+                    file_read_path,
+                    ProxmoxType.QEMU,
+                    self.resource_id,
+                )
+                if isinstance(file_result, dict) and isinstance(
+                    file_result.get("content"), str
+                ):
+                    guest_file_content = file_result["content"]
+            except UpdateFailed:
+                pass
+
         update_device_via(self, ProxmoxType.QEMU, node_name)
         return ProxmoxVMData(
             type=ProxmoxType.QEMU,
@@ -421,6 +456,8 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
                 else (api_status.get("status", UNDEFINED))
             ),
             locked=bool(api_status.get("lock")),
+            guest_file_content=guest_file_content,
+            guest_file_path=guest_file_path or UNDEFINED,
             name=api_status.get("name", UNDEFINED),
             health=api_status.get("qmpstatus", UNDEFINED),
             uptime=api_status.get("uptime", UNDEFINED),

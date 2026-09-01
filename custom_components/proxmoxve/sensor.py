@@ -643,6 +643,19 @@ PROXMOX_SENSOR_QEMU: Final[tuple[ProxmoxSensorEntityDescription, ...]] = (
             else x.status
         ),
     ),
+    ProxmoxSensorEntityDescription(
+        key=ProxmoxKeyAPIParse.GUEST_FILE_CONTENT,
+        name="Guest file content",
+        icon="mdi:file-document-outline",
+        translation_key="guest_file_content",
+        # HA truncates entity state to 255 chars; the full (still capped)
+        # content read from the guest is available as an attribute.
+        conversion_fn=lambda x: x[:255] if isinstance(x, str) else x,
+        extra_attrs=[
+            ProxmoxKeyAPIParse.GUEST_FILE_PATH,
+            ProxmoxKeyAPIParse.GUEST_FILE_CONTENT,
+        ],
+    ),
     *PROXMOX_SENSOR_CPU,
     *PROXMOX_SENSOR_DISK,
     *PROXMOX_SENSOR_MEMORY,
