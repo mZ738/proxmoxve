@@ -14,8 +14,8 @@
       "groupName": "github-actions"
     },
     {
-      "description": "Group all Python (pip) dependency updates into one PR",
-      "matchManagers": ["pip_requirements"],
+      "description": "Group all Python (pip) dependency updates into one PR, including the runtime requirement pinned in manifest.json",
+      "matchManagers": ["pip_requirements", "homeassistant-manifest"],
       "groupName": "python-dependencies"
     },
     {
