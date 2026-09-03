@@ -50,6 +50,9 @@ bash pve-mod-gui-sensors.sh install
 
 Compatible with Proxmox VE 9.0-9.2 per the [PVE-mods](https://github.com/Meliox/PVE-mods) README; check there for the current path/instructions if this changes again.
 
+> [!WARNING]
+> PVE-mods now also has a "v2" (`node_info`) package that replaces this legacy script. **It is not yet supported here** — it injects its data under a different field (`PveMod_JsonSensorInfo`, nested under `data["PVE MOD lm-sensors Enhanced"]` plus extra per-chip metadata and separate GPU/UPS/system-info fields) instead of the `sensorsOutput` field this integration currently parses. Installing v2 instead of the legacy script means no hardware sensors will appear. Use the legacy script above for now; support for v2 may be added later.
+
 This modifies the Proxmox VE API to inject `sensors -j` output into the `GET /nodes/{node}/status` response. No additional API calls are made by the integration.
 
 #### Supported Hardware
