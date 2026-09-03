@@ -275,6 +275,8 @@ class ProxmoxNodeCoordinator(ProxmoxCoordinator):
         sensors: dict[str, float] = {}
         sensors_raw: str | None = None
         if sensors_output := api_status.get("sensorsOutput"):
+            # Legacy PVE-mods script (pve-mod-gui-sensors.sh): raw `sensors -j`
+            # JSON as a string.
             sensors_raw = sensors_output
             try:
                 parsed = json.loads(sensors_output)
@@ -284,6 +286,21 @@ class ProxmoxNodeCoordinator(ProxmoxCoordinator):
                 LOGGER.debug(
                     "Failed to parse sensorsOutput for node %s", self.resource_id
                 )
+        elif isinstance(
+            v2_sensor_info := api_status.get("PveMod_JsonSensorInfo"), dict
+        ):
+            # PVE-mods v2 (node_info package): already-decoded object, with
+            # the `sensors -j`-shaped data nested under
+            # data["PVE MOD lm-sensors Enhanced"] and extra per-chip
+            # metadata (Adapter/model/serial/cpu_model/...) mixed in
+            # alongside the sensor readings; _parse_sensors_dict already
+            # ignores anything whose keys don't end in "_input".
+            lm_sensors_data = v2_sensor_info.get("data", {}).get(
+                "PVE MOD lm-sensors Enhanced"
+            )
+            if isinstance(lm_sensors_data, dict):
+                sensors = _parse_sensors_dict(lm_sensors_data)
+                sensors_raw = json.dumps(lm_sensors_data)
 
         if node_status != "":
             return ProxmoxNodeData(

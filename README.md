@@ -40,18 +40,17 @@ The integration automatically discovers and exposes hardware temperature, voltag
 
 #### Prerequisites
 
-On each Proxmox VE host, install `lm-sensors` and the PVE-mods script:
+On each Proxmox VE host, install `lm-sensors` and [PVE-mods](https://github.com/Meliox/PVE-mods), either variant:
 
-```bash
-apt-get install lm-sensors
-wget https://raw.githubusercontent.com/Meliox/PVE-mods/main/legacy-scripts/pve-mod-gui-sensors.sh
-bash pve-mod-gui-sensors.sh install
-```
+- **v2 (`node_info`, current)** — installed via its Debian package/configure wizard. Exposes sensor data under a `PveMod_JsonSensorInfo` field (temperature only; its separate GPU/UPS/system-info fields aren't read by this integration). See the PVE-mods README for install instructions.
+- **Legacy script (`pve-mod-gui-sensors.sh`)** — still supported, exposes a `sensorsOutput` field:
+  ```bash
+  apt-get install lm-sensors
+  wget https://raw.githubusercontent.com/Meliox/PVE-mods/main/legacy-scripts/pve-mod-gui-sensors.sh
+  bash pve-mod-gui-sensors.sh install
+  ```
 
-Compatible with Proxmox VE 9.0-9.2 per the [PVE-mods](https://github.com/Meliox/PVE-mods) README; check there for the current path/instructions if this changes again.
-
-> [!WARNING]
-> PVE-mods now also has a "v2" (`node_info`) package that replaces this legacy script. **It is not yet supported here** — it injects its data under a different field (`PveMod_JsonSensorInfo`, nested under `data["PVE MOD lm-sensors Enhanced"]` plus extra per-chip metadata and separate GPU/UPS/system-info fields) instead of the `sensorsOutput` field this integration currently parses. Installing v2 instead of the legacy script means no hardware sensors will appear. Use the legacy script above for now; support for v2 may be added later.
+Both are auto-detected — whichever one is installed and enabled for temperature sensors is used, no configuration needed on the integration side. Compatible with Proxmox VE 9.0-9.2 per the PVE-mods README; check there for current install instructions if paths change again.
 
 This modifies the Proxmox VE API to inject `sensors -j` output into the `GET /nodes/{node}/status` response. No additional API calls are made by the integration.
 
