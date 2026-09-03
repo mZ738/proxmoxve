@@ -422,6 +422,7 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
             raise UpdateFailed(msg)
 
         guest_disk_used: int | UndefinedType = UNDEFINED
+        guest_disk_total: int | UndefinedType = UNDEFINED
 
         try:
             fsinfo_path = (
@@ -440,7 +441,8 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
             entries = fsinfo.get("result", []) if isinstance(fsinfo, dict) else fsinfo
 
             if isinstance(entries, list):
-                filesystems_by_device: dict[str, int] = {}
+                filesystems_used_by_device: dict[str, int] = {}
+                filesystems_total_by_device: dict[str, int] = {}
 
                 for fs in entries:
                     if not isinstance(fs, dict):
@@ -454,16 +456,31 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
                     device_key = disk0.get("dev") or fs.get("name")
 
                     used = fs.get("used-bytes")
+                    total = fs.get("total-bytes")
                     if not device_key or not isinstance(used, (int, float)):
                         continue
 
-                    filesystems_by_device[device_key] = max(
-                        filesystems_by_device.get(device_key, 0),
+                    filesystems_used_by_device[device_key] = max(
+                        filesystems_used_by_device.get(device_key, 0),
                         int(used),
                     )
+                    if isinstance(total, (int, float)):
+                        filesystems_total_by_device[device_key] = max(
+                            filesystems_total_by_device.get(device_key, 0),
+                            int(total),
+                        )
 
-                if filesystems_by_device:
-                    guest_disk_used = sum(filesystems_by_device.values())
+                if filesystems_used_by_device:
+                    guest_disk_used = sum(filesystems_used_by_device.values())
+                    # Only trust the guest-reported total if every filesystem
+                    # that contributed to guest_disk_used also reported one,
+                    # otherwise the two numbers count a different set of
+                    # filesystems.
+                    if (
+                        filesystems_total_by_device.keys()
+                        == filesystems_used_by_device.keys()
+                    ):
+                        guest_disk_total = sum(filesystems_total_by_device.values())
 
         except UpdateFailed:
             pass
@@ -519,7 +536,11 @@ class ProxmoxQEMUCoordinator(ProxmoxCoordinator):
             ),
             network_in=api_status.get("netin", UNDEFINED),
             network_out=api_status.get("netout", UNDEFINED),
-            disk_total=api_status.get("maxdisk", UNDEFINED),
+            disk_total=(
+                guest_disk_total
+                if guest_disk_total is not UNDEFINED
+                else api_status.get("maxdisk", UNDEFINED)
+            ),
             disk_used=(
                 guest_disk_used
                 if guest_disk_used is not UNDEFINED
