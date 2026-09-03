@@ -44,9 +44,11 @@ On each Proxmox VE host, install `lm-sensors` and the PVE-mods script:
 
 ```bash
 apt-get install lm-sensors
-wget https://raw.githubusercontent.com/Meliox/PVE-mods/main/pve-mod-gui-sensors.sh
+wget https://raw.githubusercontent.com/Meliox/PVE-mods/main/legacy-scripts/pve-mod-gui-sensors.sh
 bash pve-mod-gui-sensors.sh install
 ```
+
+Compatible with Proxmox VE 9.0-9.2 per the [PVE-mods](https://github.com/Meliox/PVE-mods) README; check there for the current path/instructions if this changes again.
 
 This modifies the Proxmox VE API to inject `sensors -j` output into the `GET /nodes/{node}/status` response. No additional API calls are made by the integration.
 
