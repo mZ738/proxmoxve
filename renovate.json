@@ -4,7 +4,7 @@
     "config:recommended"
   ],
   "timezone": "Europe/Berlin",
-  "schedule": ["before 6am on monday"],
+  "schedule": ["before 6am"],
   "dependencyDashboard": true,
   "labels": ["dependencies"],
   "packageRules": [
@@ -22,6 +22,12 @@
       "description": "homeassistant is pinned manually to match hacs.json / manifest.json",
       "matchManagers": ["pip_requirements"],
       "matchPackageNames": ["homeassistant"],
+      "enabled": false
+    },
+    {
+      "description": "The Python version the workflows run on is a deliberate choice, kept in sync with .ruff.toml's target-version - not something to bump inside a grouped actions PR",
+      "matchManagers": ["github-actions"],
+      "matchDepNames": ["python"],
       "enabled": false
     }
   ]
