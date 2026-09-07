@@ -291,6 +291,7 @@ async def async_setup_entry(
 
 
 def create_button(
+    *,
     coordinator: DataUpdateCoordinator,
     info_device: DeviceInfo,
     description: ProxmoxButtonEntityDescription,
@@ -319,6 +320,7 @@ class ProxmoxButtonEntity(ProxmoxEntity, ButtonEntity):
 
     def __init__(
         self,
+        *,
         coordinator: DataUpdateCoordinator,
         info_device: DeviceInfo,
         description: ProxmoxButtonEntityDescription,

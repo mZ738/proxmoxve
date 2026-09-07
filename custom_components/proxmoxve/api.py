@@ -29,13 +29,13 @@ class ProxmoxClient:
 
     def __init__(
         self,
+        *,
         host: str,
         user: str,
         password: str,
         token_name: str = "",
         port: int | None = DEFAULT_PORT,
         realm: str | None = DEFAULT_REALM,
-        *,
         verify_ssl: bool | None = DEFAULT_VERIFY_SSL,
     ) -> None:
         """Initialize the ProxmoxClient."""
@@ -130,6 +130,7 @@ def put_api(
 
 def post_api_command(
     self,
+    *,
     proxmox_client: ProxmoxClient,
     api_category: ProxmoxType,
     command: str,

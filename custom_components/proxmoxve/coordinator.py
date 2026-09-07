@@ -1395,7 +1395,10 @@ def update_device_via(
         )
 
 
-def poll_api(
+# Keyword-only arguments are not an option here: every caller reaches this
+# through `hass.async_add_executor_job(poll_api, ...)`, which forwards its
+# arguments positionally and accepts no keywords.
+def poll_api(  # noqa: PLR0917
     hass: HomeAssistant,
     config_entry: ConfigEntry,
     proxmox: ProxmoxAPI,

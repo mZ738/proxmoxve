@@ -797,7 +797,7 @@ class ProxmoxVEConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             try:
                 self._proxmox_client = ProxmoxClient(
-                    host,
+                    host=host,
                     port=port,
                     user=user,
                     token_name=token_name,
@@ -961,7 +961,7 @@ class ProxmoxVEConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if not errors:
                 try:
                     self._proxmox_client = ProxmoxClient(
-                        host,
+                        host=host,
                         port=port,
                         user=username,
                         token_name=token_name,
