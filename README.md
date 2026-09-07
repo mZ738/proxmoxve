@@ -349,3 +349,24 @@ Edit the file for your language in [`custom_components/proxmoxve/translations/`]
 Copy `en.json` to `<language code>.json` (the code Home Assistant uses, e.g. `sv.json`, `pl.json`), translate the values, and open a pull request.
 
 Placeholders such as `{node}` have to survive translation unchanged: Home Assistant silently drops a string whose placeholders differ from the English one. `tests/test_translations.py` checks that, and that no file carries a key `en.json` does not have.
+
+## Differences from mZ738/proxmoxve-integration
+
+Development happens here. Once a change is tested it moves over to [mZ738/proxmoxve-integration](https://github.com/mZ738/proxmoxve-integration), which is deliberately kept inside the original repository's fork network so the work stays usable as a pull request to [dougiteixeira/proxmoxve](https://github.com/dougiteixeira/proxmoxve) if that project becomes active again.
+
+**Only the integration's own fixes and features move across.** Anything that is specific to how this repository is run or presented stays here, so that a future pull request upstream contains the code and nothing else. Concretely, these differences are intentional and must not be ported:
+
+| Here | In the fork | Why |
+|---|---|---|
+| `renovate.json` | `.github/dependabot.yml` | Dependency automation is this repository's own choice; the fork keeps what the original uses. |
+| Links point at `mZ738/proxmoxve` — `manifest.json` (`codeowners`, `documentation`, `issue_tracker`), README badges, the issue templates, and the blueprint's `source_url` and import links | All of those still point at `dougiteixeira/proxmoxve` | Home Assistant re-reads a blueprint's `source_url` to offer updates, and issue links have to reach a tracker the repository owner can act on. Upstream those are the original's to keep. |
+| `hacs.json` has `hide_default_branch: true` | `false` | A distribution choice, not a bug. Genuine `hacs.json` errors (such as the `domains` and `iot_class` keys HACS rejects) *are* ported. |
+| README note framing this as a continued fork | absent | Written for this repository, which left the fork network; the fork is still visibly a fork. |
+| A `feature_request.yml` issue template, no discussions contact link | The original's contact link to `dougiteixeira/proxmoxve` discussions | Discussions were disabled here when the template was written. |
+| No Crowdin: translations are pull requests | `crowdin.yml`, the new-language issue template and the README's Crowdin section | The original project genuinely uses Crowdin; this repository has neither the workflow nor the credentials. |
+| HACS validation runs in `.github/workflows/validate.yml` | Still commented out | The check requires repository topics, which live in GitHub's settings rather than in git, so a port cannot carry them — it would fail there on every run. |
+| Dev container image `3-3.13` (Debian trixie) | `1-3.13` | A Renovate-driven bump here. The `apt-key` fix that makes the Dockerfile trixie-safe *is* ported, since it is a real bug either way. |
+
+Repository settings — description, topics, branch protection — are not stored in git and never travel with a push. They are set per repository.
+
+After transferring a batch of commits, diff `hacs.json`, `manifest.json` and the README's repository links against the fork point to catch anything that slipped through.
