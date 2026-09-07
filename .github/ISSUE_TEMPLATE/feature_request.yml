@@ -1,0 +1,41 @@
+name: Request a feature for Proxmox VE Custom Integration
+description: Suggest a new feature or an improvement to an existing one.
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## The request
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the feature you would like
+      description: >
+        What should the integration be able to do that it cannot do today?
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: What would you use it for
+      description: >
+        Describing the situation you are trying to solve helps a lot - there is
+        often more than one way to get there, and some are easier to build than
+        others.
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: input
+    attributes:
+      label: What version of Proxmox VE would this run against?
+      description: >
+        Some data is only exposed by newer Proxmox VE releases, so this decides
+        whether the feature is possible at all.
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        Anything else that helps: links to the Proxmox API documentation, a
+        screenshot of where you would expect this in Home Assistant, or how you
+        solve it today.
