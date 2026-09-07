@@ -2,6 +2,8 @@
 
 > [!NOTE]
 > This is a fork of [dougiteixeira/proxmoxve](https://github.com/dougiteixeira/proxmoxve), continued here since the original repository has been inactive for a while. All credit for the original integration goes to [@dougiteixeira](https://github.com/dougiteixeira) and its contributors.
+>
+> This repository is where I develop. Once a change is tested, it moves over to [mZ738/proxmoxve-integration](https://github.com/mZ738/proxmoxve-integration) — a repository kept as a real fork of the original, so the work stays available for a pull request to [dougiteixeira/proxmoxve](https://github.com/dougiteixeira/proxmoxve) should it become active again. Only the integration's own fixes and features move across; everything specific to how this repository is run and branded stays here.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/5b5a8c5b-885b-4233-a858-2e78b97d8c74">
