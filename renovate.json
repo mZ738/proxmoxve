@@ -24,6 +24,12 @@
       "enabled": false
     },
     {
+      "description": "pytest is pinned to an exact version by pytest-homeassistant-custom-component, so bumping it on its own can never resolve",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["pytest"],
+      "enabled": false
+    },
+    {
       "description": "The Python version the workflows run on is a deliberate choice, kept in sync with .ruff.toml's target-version - not something to bump inside a grouped actions PR",
       "matchManagers": ["github-actions"],
       "matchDepNames": ["python"],
