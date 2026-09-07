@@ -123,17 +123,17 @@ Have [HACS](https://hacs.xyz/) installed, this will allow you to update easily.
 
 * Adding Proxmox VE to HACS can be using this button:
 
-[![image](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mZ738&repository=proxmoxve&category=integration)
+[![image](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=mZ738&repository=proxmoxve-dev&category=integration)
 
 > [!NOTE]
-> If the button above doesn't work, add `https://github.com/mZ738/proxmoxve` as a custom repository of type Integration in HACS.
+> If the button above doesn't work, add `https://github.com/mZ738/proxmoxve-dev` as a custom repository of type Integration in HACS.
 
 * Click Install on the `Proxmox VE` integration.
 * Restart the Home Assistant.
 
 <details><summary>Manual installation</summary>
  
-* Copy `proxmoxve`  folder from [latest release](https://github.com/mZ738/proxmoxve/releases/latest) to [`custom_components` folder](https://developers.home-assistant.io/docs/creating_integration_file_structure/#where-home-assistant-looks-for-integrations) in your config directory.
+* Copy `proxmoxve`  folder from [latest release](https://github.com/mZ738/proxmoxve-dev/releases/latest) to [`custom_components` folder](https://developers.home-assistant.io/docs/creating_integration_file_structure/#where-home-assistant-looks-for-integrations) in your config directory.
 * Restart the Home Assistant.
 </details>
 
@@ -359,7 +359,7 @@ Development happens here. Once a change is tested it moves over to [mZ738/proxmo
 | Here | In the fork | Why |
 |---|---|---|
 | `renovate.json` | `.github/dependabot.yml` | Dependency automation is this repository's own choice; the fork keeps what the original uses. |
-| Links point at `mZ738/proxmoxve` — `manifest.json` (`codeowners`, `documentation`, `issue_tracker`), README badges, the issue templates, and the blueprint's `source_url` and import links | All of those still point at `dougiteixeira/proxmoxve` | Home Assistant re-reads a blueprint's `source_url` to offer updates, and issue links have to reach a tracker the repository owner can act on. Upstream those are the original's to keep. |
+| Links point at `mZ738/proxmoxve-dev` — `manifest.json` (`codeowners`, `documentation`, `issue_tracker`), README badges, the issue templates, and the blueprint's `source_url` and import links | All of those still point at `dougiteixeira/proxmoxve` | Home Assistant re-reads a blueprint's `source_url` to offer updates, and issue links have to reach a tracker the repository owner can act on. Upstream those are the original's to keep. |
 | `hacs.json` has `hide_default_branch: true` | `false` | A distribution choice, not a bug. Genuine `hacs.json` errors (such as the `domains` and `iot_class` keys HACS rejects) *are* ported. |
 | README note framing this as a continued fork | absent | Written for this repository, which left the fork network; the fork is still visibly a fork. |
 | A `feature_request.yml` issue template, no discussions contact link | The original's contact link to `dougiteixeira/proxmoxve` discussions | Discussions were disabled here when the template was written. |

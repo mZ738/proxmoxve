@@ -5,9 +5,9 @@
     "@mZ738"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/mZ738/proxmoxve",
+  "documentation": "https://github.com/mZ738/proxmoxve-dev",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/mZ738/proxmoxve/issues",
+  "issue_tracker": "https://github.com/mZ738/proxmoxve-dev/issues",
   "loggers": [
     "proxmoxer"
   ],
