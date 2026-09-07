@@ -335,26 +335,17 @@ Some entities are disabled by default (including control buttons), see below how
 > The Wake on LAN button only works if the configured node is in a cluster of two or more nodes. If you want to use WOL on a single Node, use the official `Wake-On-Lan` integration.
 
 ## Translations
-[![Crowdin](https://badges.crowdin.net/proxmoxve-homeassistant/localized.svg)](https://crowdin.com/project/proxmoxve-homeassistant)
 
-You can help by adding missing translations when you are a native speaker. Or add a complete new language when there is no language file available.
+You can help by filling in missing translations when you are a native speaker, or by adding a language that has no file yet.
 
-Proxmox VE Custom Integration uses [Crowdin](https://crowdin.com) to make contributing easy.
+The original project ran this through Crowdin. This fork does not: translations live in the repository and come in as pull requests, which also means a new language is available in the next release rather than after a round trip through a translation platform.
 
-### Changing or adding to existing language
+### Changing or adding to an existing language
 
-First register and join the translation project:
-* If you don’t have a Crowdin account yet, create one at https://crowdin.com
-* Go to the [Proxmox VE Custom Integration for Home Assistant project page](https://crowdin.com/project/proxmoxve-homeassistant)
-* Click Join.
-
-Next translate a string:
-* Select the language you want to contribute to from the dashboard.
-* Click Translate All.
-* Find the string you want to edit, missing translation are marked red.
-* Fill in or modify the translation and click Save.
-* Repeat for other translations.
+Edit the file for your language in [`custom_components/proxmoxve/translations/`](custom_components/proxmoxve/translations/) and open a pull request. `en.json` is the reference — translate the values and leave the keys exactly as they are.
 
 ### Adding a new language
 
-[Create an Issue](https://github.com/mZ738/proxmoxve/issues/new?template=new_language_request.yml&title=New+language) requesting a new language. We will do the necessary work to add the new translation to the integration and Crowdin site, when it's ready for you to contribute we'll comment on the issue you raised.
+Copy `en.json` to `<language code>.json` (the code Home Assistant uses, e.g. `sv.json`, `pl.json`), translate the values, and open a pull request.
+
+Placeholders such as `{node}` have to survive translation unchanged: Home Assistant silently drops a string whose placeholders differ from the English one. `tests/test_translations.py` checks that, and that no file carries a key `en.json` does not have.

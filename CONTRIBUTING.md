@@ -46,6 +46,16 @@ People *love* thorough bug reports. I'm not even kidding.
 
 Use [ruff](https://github.com/astral-sh/ruff) to make sure the code follows the style (`scripts/lint` runs `ruff format` and `ruff check --fix` for you).
 
+## Translations
+
+`custom_components/proxmoxve/translations/en.json` is the reference; every
+other language file mirrors its keys. There is no Crowdin project behind this
+repository, so a new language or a correction comes in as a normal pull
+request: copy `en.json`, translate the values, and leave the keys untouched.
+`tests/test_translations.py` checks that no file carries a key `en.json` does
+not have and that placeholders such as `{node}` match the English string —
+Home Assistant silently drops a translation whose placeholders differ.
+
 ## Test your code modification
 
 It comes with development environment in a container, easy to launch
