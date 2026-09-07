@@ -1,3 +1,5 @@
+# Copyright (c) 2019-2026
+# SPDX-License-Identifier: MIT
 """DataUpdateCoordinators for the Proxmox VE integration."""
 
 from __future__ import annotations

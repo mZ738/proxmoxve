@@ -1,3 +1,5 @@
+# Copyright (c) 2019-2026
+# SPDX-License-Identifier: MIT
 """Button to set Proxmox VE data."""
 
 from __future__ import annotations

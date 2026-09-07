@@ -38,8 +38,6 @@ ignore = [
     "PLR0911",
     "C901",
 
-    # Promoted out of preview in ruff 0.16, and this file selects ALL
-    "CPY001",  # missing-copyright-notice - the license lives in LICENSE.md
 ]
 
 [lint.flake8-pytest-style]

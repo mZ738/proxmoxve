@@ -1,3 +1,5 @@
+# Copyright (c) 2019-2026
+# SPDX-License-Identifier: MIT
 """Tests for the Proxmox VE API helpers."""
 
 from functools import partial

@@ -1,3 +1,5 @@
+# Copyright (c) 2019-2026
+# SPDX-License-Identifier: MIT
 """Handle API for Proxmox VE."""
 
 from typing import Any
