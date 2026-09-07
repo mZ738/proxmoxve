@@ -2,11 +2,11 @@ blueprint:
   name: Proxmox - Reload Config Entry
   description: ""
   domain: automation
-  source_url: https://github.com/dougiteixeira/proxmoxve/blob/main/blueprints/reload_config_entry_auto.yaml
+  source_url: https://github.com/mZ738/proxmoxve/blob/main/blueprints/reload_config_entry_auto.yaml
   input:
     proxmox_host_status:
       name: Host status
-      description: Select the Proxmox host connectivity entity ([see details at here](https://github.com/dougiteixeira/proxmoxve/blob/main/blueprints/readme.md#previous-steps))
+      description: Select the Proxmox host connectivity entity ([see details at here](https://github.com/mZ738/proxmoxve/blob/main/blueprints/readme.md#previous-steps))
       selector:
           entity:
             multiple: false
