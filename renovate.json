@@ -4,7 +4,6 @@
     "config:recommended"
   ],
   "timezone": "Europe/Berlin",
-  "schedule": ["before 6am"],
   "dependencyDashboard": true,
   "labels": ["dependencies"],
   "packageRules": [
