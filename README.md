@@ -58,7 +58,9 @@ This modifies the Proxmox VE API to inject `sensors -j` output into the `GET /no
 
 #### When readings come and go
 
-PVE-mods v2 does this in two steps: a collector inside `pveproxy` runs `sensors`, enriches it with drive and CPU names, and writes the result to `/run/pveproxy/pve-mod/sensors.json`; the API handler then reads that file back. When those two race, the field arrives in the response **present but empty**, and every hardware sensor would drop to *unknown* for that minute.
+PVE-mods v2 does this in two steps: a collector inside `pveproxy` runs `sensors`, enriches it with drive and CPU names, and writes the result to `/run/pveproxy/pve-mod/sensors.json`; the API handler then reads that file back. If the file is not there when it is read, the field arrives in the response **present but empty**, and every hardware sensor drops to *unknown*.
+
+That file lives on a tmpfs in a directory systemd removes when `pveproxy` stops, so anything restarting the proxy — installing a certificate, for instance — can take it away. Re-running the PVE-mods configuration recreates it.
 
 The integration keeps the previous readings for up to ten minutes when a poll brings none, so a missed collection leaves no hole in the history. Past that it reports nothing, because by then the data really is gone rather than late — PVE-mods removed, the module unloaded, `lm-sensors` broken.
 
