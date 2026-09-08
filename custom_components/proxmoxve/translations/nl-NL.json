@@ -18,7 +18,7 @@
                 "data": {
                     "nodes": "Nodes",
                     "qemu": "Virtuele Machines (QEMU)",
-                    "lxc": "Linux Containers (LXC)",
+                    "lxc": "Linux-containers (LXC)",
                     "storage": "Opslagruimtes",
                     "disks_enable": "Schakel fysieke schijfinformatie in",
                     "tasks_enable": "Monitor mislukte taken"
@@ -140,7 +140,7 @@
             "change_expose": {
                 "description": "Selecteer de Proxmox-instance nodes, Virtual Machines (QEMU) en Containers (LXC) die u wilt laten zien",
                 "data": {
-                    "lxc": "Linux Containers (LXC)",
+                    "lxc": "Linux-containers (LXC)",
                     "nodes": "Nodes",
                     "qemu": "Virtuele Machines (QEMU)",
                     "storage": "Opslagruimtes",
@@ -199,10 +199,10 @@
                 "name": "Herstarten"
             },
             "start": {
-                "name": "Start"
+                "name": "Starten"
             },
             "stop": {
-                "name": "Stop"
+                "name": "Stoppen"
             },
             "resume": {
                 "name": "Hervat"
@@ -211,7 +211,7 @@
                 "name": "Onderbreken"
             },
             "reset": {
-                "name": "Reset"
+                "name": "Resetten"
             },
             "wakeonlan": {
                 "name": "Wake-on-LAN"
@@ -243,7 +243,7 @@
                 "name": "Schijf gebruikt percentage"
             },
             "disk_wearout": {
-                "name": "Wearout"
+                "name": "Slijtage"
             },
             "failed_tasks_count": {
                 "name": "Mislukte taken",
@@ -327,7 +327,7 @@
                 "name": "Status",
                 "state": {
                     "internal-error": "Interne fout",
-                    "prelaunch": "Pre launch",
+                    "prelaunch": "Vóór start",
                     "paused": "Gepauzeerd",
                     "stopped": "Gestopt",
                     "suspended": "Onderbroken",

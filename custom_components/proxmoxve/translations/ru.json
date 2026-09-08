@@ -21,11 +21,11 @@
                     "lxc": "Контейнеры Linux (LXC)",
                     "storage": "Хранилища",
                     "disks_enable": "Включить мониторинг физических дисков",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Отслеживать неудачные задачи"
                 },
                 "data_description": {
                     "disks_enable": "При использовании гибернации дисков отключите эту опцию, чтобы предотвратить их нежелательное пробуждение.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Отслеживает и показывает неудачные задачи за последние 24 часа на выбранных узлах."
                 }
             },
             "reauth_confirm": {
@@ -145,11 +145,11 @@
                     "qemu": "Виртуальные машины (QEMU)",
                     "storage": "Хранилища",
                     "disks_enable": "Включить мониторинг физических дисков",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Отслеживать неудачные задачи"
                 },
                 "data_description": {
                     "disks_enable": "При использовании гибернации дисков отключите эту опцию, чтобы предотвратить их нежелательное пробуждение.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Отслеживает и показывает неудачные задачи за последние 24 часа на выбранных узлах."
                 }
             }
         },
@@ -252,13 +252,13 @@
                 "name": "Износ"
             },
             "failed_tasks_count": {
-                "name": "Failed tasks",
+                "name": "Неудачные задачи",
                 "state_attributes": {
                     "recent_failures": {
-                        "name": "Recent failures"
+                        "name": "Недавние сбои"
                     },
                     "last_failure_time": {
-                        "name": "Last failure time"
+                        "name": "Время последнего сбоя"
                     }
                 }
             },

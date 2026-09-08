@@ -21,11 +21,11 @@
                     "lxc": "Contentores Linux (LXC)",
                     "storage": "Armazenamentos",
                     "disks_enable": "Ativar informação dos discos físicos",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Monitorizar tarefas falhadas"
                 },
                 "data_description": {
                     "disks_enable": "Se utilizar hibernação de discos, deve desativar esta opção para que os discos não sejam reativados indevidamente.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Acompanha e comunica as tarefas falhadas das últimas 24 horas nos nós selecionados."
                 }
             },
             "reauth_confirm": {
@@ -34,20 +34,20 @@
                 "data": {
                     "password": "Senha ou valor do token",
                     "username": "Nome de utilizador",
-                    "token_name": "Token name",
+                    "token_name": "Nome do token",
                     "realm": "Realm"
                 }
             },
             "reconfigure": {
-                "description": "Proxmox host information",
+                "description": "Informação do host Proxmox",
                 "data": {
                     "host": "Host",
-                    "password": "Password or token value",
-                    "token_name": "Token name",
+                    "password": "Palavra-passe ou valor do token",
+                    "token_name": "Nome do token",
                     "port": "Port",
                     "realm": "Realm",
-                    "username": "Username",
-                    "verify_ssl": "Verify SSL certificate"
+                    "username": "Nome de utilizador",
+                    "verify_ssl": "Verificar o certificado SSL"
                 }
             }
         },
@@ -62,7 +62,7 @@
             "already_configured": "Dispositivo já configurado",
             "no_resources": "Não foram devolvidos recursos para esta instância.",
             "reauth_successful": "Reautenticação bem-sucedida",
-            "reconfigure_successful": "Reconfiguration completed successfully."
+            "reconfigure_successful": "Reconfiguração concluída com êxito."
         }
     },
     "issues": {
@@ -138,18 +138,18 @@
                 "description": "Informação do host Proxmox"
             },
             "change_expose": {
-                "description": "Select the Proxmox instance nodes and Virtual Machines (QEMU) and Containers (LXC) you want to expose",
+                "description": "Selecione os nós da instância Proxmox e as máquinas virtuais (QEMU) e contentores (LXC) que pretende expor",
                 "data": {
                     "lxc": "Contentores Linux (LXC)",
                     "nodes": "Nós",
                     "qemu": "Máquinas Virtuais (QEMU)",
                     "storage": "Armazenamentos",
                     "disks_enable": "Ativar informação dos discos físicos",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Monitorizar tarefas falhadas"
                 },
                 "data_description": {
                     "disks_enable": "Se utilizar hibernação de discos, deve desativar esta opção para que os discos não sejam reativados indevidamente.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Acompanha e comunica as tarefas falhadas das últimas 24 horas nos nós selecionados."
                 }
             }
         },
@@ -165,12 +165,12 @@
             "no_vms": "Não há máquinas virtuais ou contentores para este nó, a entrada de configuração será criada para o nó.",
             "changes_successful": "Alterações guardadas com sucesso.",
             "no_nodes_to_add": "Não há nós para adicionar.",
-            "node_already_exists": "The selected node already exists.",
-            "auth_error": "Invalid authentication",
-            "cant_connect": "Failed to connect",
-            "general_error": "Unexpected error",
-            "invalid_port": "Invalid port number",
-            "ssl_rejection": "Could not verify the SSL certificate"
+            "node_already_exists": "O nó selecionado já existe.",
+            "auth_error": "Autenticação inválida",
+            "cant_connect": "Falha na ligação",
+            "general_error": "Erro inesperado",
+            "invalid_port": "Número de porta inválido",
+            "ssl_rejection": "Não foi possível verificar o certificado SSL"
         }
     },
     "entity": {
@@ -179,42 +179,42 @@
                 "name": "Status"
             },
             "health": {
-                "name": "Health"
+                "name": "Estado de funcionamento"
             },
             "locked": {
                 "name": "Bloqueado"
             },
             "update_avail": {
-                "name": "Updates packages"
+                "name": "Pacotes de atualização"
             }
         },
         "button": {
             "start_all": {
-                "name": "Start all"
+                "name": "Iniciar todos"
             },
             "stop_all": {
-                "name": "Stop all"
+                "name": "Parar todos"
             },
             "shutdown": {
-                "name": "Shutdown"
+                "name": "Encerrar"
             },
             "reboot": {
-                "name": "Reboot"
+                "name": "Reiniciar"
             },
             "start": {
-                "name": "Start"
+                "name": "Iniciar"
             },
             "stop": {
-                "name": "Stop"
+                "name": "Parar"
             },
             "unlock": {
                 "name": "Desbloquear"
             },
             "resume": {
-                "name": "Resume"
+                "name": "Retomar"
             },
             "suspend": {
-                "name": "Suspend"
+                "name": "Suspender"
             },
             "reset": {
                 "name": "Reset"
@@ -225,149 +225,149 @@
         },
         "sensor": {
             "cpu_used": {
-                "name": "CPU used"
+                "name": "CPU utilizado"
             },
             "disk_free": {
-                "name": "Disk free"
+                "name": "Disco livre"
             },
             "disk_free_perc": {
-                "name": "Disk free percentage"
+                "name": "Percentagem de disco livre"
             },
             "disk_rpm": {
-                "name": "Disk speed"
+                "name": "Velocidade do disco"
             },
             "disk_size": {
-                "name": "Size"
+                "name": "Tamanho"
             },
             "disk_total": {
-                "name": "Disk total"
+                "name": "Disco total"
             },
             "disk_used": {
-                "name": "Disk used"
+                "name": "Disco utilizado"
             },
             "disk_used_perc": {
-                "name": "Disk used percentage"
+                "name": "Percentagem de disco utilizado"
             },
             "disk_wearout": {
-                "name": "Wearout"
+                "name": "Desgaste"
             },
             "failed_tasks_count": {
-                "name": "Failed tasks",
+                "name": "Tarefas falhadas",
                 "state_attributes": {
                     "recent_failures": {
-                        "name": "Recent failures"
+                        "name": "Falhas recentes"
                     },
                     "last_failure_time": {
-                        "name": "Last failure time"
+                        "name": "Hora da última falha"
                     }
                 }
             },
             "life_left": {
-                "name": "Life left"
+                "name": "Vida útil restante"
             },
             "zfs_health": {
-                "name": "Health"
+                "name": "Estado de funcionamento"
             },
             "zfs_free_perc": {
-                "name": "Free percentage"
+                "name": "Percentagem livre"
             },
             "zfs_total": {
                 "name": "Total"
             },
             "zfs_used": {
-                "name": "Used"
+                "name": "Utilizado"
             },
             "zfs_used_perc": {
-                "name": "Used percentage"
+                "name": "Percentagem utilizada"
             },
             "lxc_on": {
-                "name": "Containers running",
+                "name": "Contentores em execução",
                 "state_attributes": {
                     "lxc_on_list": {
-                        "name": "Containers list"
+                        "name": "Lista de contentores"
                     }
                 }
             },
             "memory_free": {
-                "name": "Memory free"
+                "name": "Memória livre"
             },
             "memory_free_perc": {
-                "name": "Memory free percentage"
+                "name": "Percentagem de memória livre"
             },
             "memory_total": {
-                "name": "Memory total"
+                "name": "Memória total"
             },
             "memory_used": {
-                "name": "Memory used"
+                "name": "Memória utilizada"
             },
             "memory_used_perc": {
-                "name": "Memory used percentage"
+                "name": "Percentagem de memória utilizada"
             },
             "network_in": {
-                "name": "Network in"
+                "name": "Entrada de rede"
             },
             "network_out": {
-                "name": "Network out"
+                "name": "Saída de rede"
             },
             "node": {
-                "name": "Node"
+                "name": "Nó"
             },
             "power_cycles": {
-                "name": "Power cycles"
+                "name": "Ciclos de energia"
             },
             "power_loss": {
-                "name": "Unexpected power loss"
+                "name": "Perda de energia inesperada"
             },
             "power_hours": {
-                "name": "Power-on hours"
+                "name": "Horas ligado"
             },
             "qemu_on": {
-                "name": "Virtual machines running",
+                "name": "Máquinas virtuais em execução",
                 "state_attributes": {
                     "qemu_on_list": {
-                        "name": "Virtual machines list"
+                        "name": "Lista de máquinas virtuais"
                     }
                 }
             },
             "status_raw": {
                 "name": "Status",
                 "state": {
-                    "internal-error": "Internal error",
-                    "prelaunch": "Pre launch",
-                    "paused": "Paused",
-                    "stopped": "Stopped",
-                    "suspended": "Suspended",
-                    "running": "Running"
+                    "internal-error": "Erro interno",
+                    "prelaunch": "Pré-arranque",
+                    "paused": "Em pausa",
+                    "stopped": "Parado",
+                    "suspended": "Suspenso",
+                    "running": "Em execução"
                 }
             },
             "swap_free": {
-                "name": "Swap free"
+                "name": "Swap livre"
             },
             "swap_free_perc": {
-                "name": "Swap free percentage"
+                "name": "Percentagem de swap livre"
             },
             "swap_total": {
                 "name": "Swap total"
             },
             "swap_used": {
-                "name": "Swap used"
+                "name": "Swap utilizado"
             },
             "swap_used_perc": {
-                "name": "Swap used percentage"
+                "name": "Percentagem de swap utilizado"
             },
             "temperature": {
-                "name": "Temperature"
+                "name": "Temperatura"
             },
             "updates_total": {
-                "name": "Total updates",
+                "name": "Total de atualizações",
                 "state_attributes": {
                     "updates_list": {
-                        "name": "Updates list"
+                        "name": "Lista de atualizações"
                     }
                 }
             },
             "uptime": {
-                "name": "Last boot"
+                "name": "Último arranque"
             }
         }
     }
