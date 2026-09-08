@@ -31,7 +31,8 @@ def test_missing_and_nonsense_values() -> None:
     assert _positive_or_undefined(-1) is UNDEFINED
     assert _positive_or_undefined("42") is UNDEFINED
     # A bool is an int in Python, but it is not a byte count.
-    assert _positive_or_undefined(True) is UNDEFINED
+    truthy = True
+    assert _positive_or_undefined(truthy) is UNDEFINED
 
 
 def test_percentage_keeps_unknown_unknown() -> None:
