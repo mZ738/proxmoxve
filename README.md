@@ -416,6 +416,7 @@ Development happens here. Once a change is tested it moves over to [mZ738/proxmo
 | Here | In the fork | Why |
 |---|---|---|
 | `renovate.json` | `.github/dependabot.yml` | Dependency automation is this repository's own choice; the fork keeps what the original uses. |
+| Hand-maintained translations in every language file | Only `en.json` travels; the other languages stay at the original's state | The original project is Crowdin-managed - its translations arrive through Crowdin's GitHub integration, so hand-edited language files there are overwritten on the next sync and never reach the translation memory. `en.json` is the source Crowdin reads, so new strings must travel; the translations themselves must not. `crowdin.yml` was removed here, which is why they are maintained by hand in this repository. |
 | Links point at `mZ738/proxmoxve-dev` — `manifest.json` (`codeowners`, `documentation`, `issue_tracker`), README badges, the issue templates, and the blueprint's `source_url` and import links | All of those still point at `dougiteixeira/proxmoxve` | Home Assistant re-reads a blueprint's `source_url` to offer updates, and issue links have to reach a tracker the repository owner can act on. Upstream those are the original's to keep. |
 | `hacs.json` has `hide_default_branch: true` | `false` | A distribution choice, not a bug. Genuine `hacs.json` errors (such as the `domains` and `iot_class` keys HACS rejects) *are* ported. |
 | README note framing this as a continued fork | absent | Written for this repository, which left the fork network; the fork is still visibly a fork. |
@@ -426,4 +427,4 @@ Development happens here. Once a change is tested it moves over to [mZ738/proxmo
 
 Repository settings — description, topics, branch protection — are not stored in git and never travel with a push. They are set per repository.
 
-After transferring a batch of commits, diff `hacs.json`, `manifest.json` and the README's repository links against the fork point to catch anything that slipped through.
+After transferring a batch of commits, diff `hacs.json`, `manifest.json`, the README's repository links and `custom_components/proxmoxve/translations/` against the fork point to catch anything that slipped through. The translations are the easy one to miss, because carrying them across looks like a favour rather than a mistake.
