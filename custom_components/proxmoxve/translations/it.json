@@ -21,11 +21,11 @@
                     "lxc": "Container Linux (LXC)",
                     "storage": "Archivi",
                     "disks_enable": "Abilita informazioni dischi fisici",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Monitora le attività non riuscite"
                 },
                 "data_description": {
                     "disks_enable": "Se lavori con l'ibernazione del disco, devi disabilitare questa opzione nell'integrazione in modo che non provochi la riattivazione impropria dei dischi.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Tiene traccia delle attività non riuscite nelle ultime 24 ore sui nodi selezionati e le segnala."
                 }
             },
             "reauth_confirm": {
@@ -34,20 +34,20 @@
                 "data": {
                     "password": "Password o token",
                     "username": "Nome utente",
-                    "token_name": "Token name",
+                    "token_name": "Nome del token",
                     "realm": "Realm"
                 }
             },
             "reconfigure": {
-                "description": "Proxmox host information",
+                "description": "Informazioni sull'host Proxmox",
                 "data": {
                     "host": "Host",
-                    "password": "Password or token value",
-                    "token_name": "Token name",
+                    "password": "Password o valore del token",
+                    "token_name": "Nome del token",
                     "port": "Port",
                     "realm": "Realm",
-                    "username": "Username",
-                    "verify_ssl": "Verify SSL certificate"
+                    "username": "Nome utente",
+                    "verify_ssl": "Verifica il certificato SSL"
                 }
             }
         },
@@ -62,7 +62,7 @@
             "already_configured": "La periferica è gia configurata",
             "no_resources": "Nessuna risorsa in questa istanza",
             "reauth_successful": "Riautenticazione eseguita con successo",
-            "reconfigure_successful": "Reconfiguration completed successfully."
+            "reconfigure_successful": "Riconfigurazione completata correttamente."
         }
     },
     "issues": {
@@ -104,7 +104,7 @@
         },
         "resource_nonexistent": {
             "description": "Il {resource_type} {resource} non esiste su ({host}:{port}), rimuovilo dalle opzioni di integrazione.\n\nQuesto può anche essere causato se l'utente non ha sufficienti autorizzazioni per accedere alla risorsa.\n\nSuggerimento sui permessi necessari:\n* `{permission}`",
-            "title": "{resource_type} {resource} does not exist"
+            "title": "{resource_type} {resource} non esiste"
         },
         "no_permissions": {
             "description": "L'utente '{user}' non ha le autorizzazioni necessarie per tutte le funzionalità.\n\nLe seguenti funzionalità non sono accessibili all'utente:\n'{errors}'\n\nControlla le autorizzazioni dell'utente come descritto nella documentazione.",
@@ -138,18 +138,18 @@
                 "description": "Informazioni sull'host Proxmox"
             },
             "change_expose": {
-                "description": "Select the Proxmox instance nodes and Virtual Machines (QEMU) and Containers (LXC) you want to expose",
+                "description": "Seleziona i nodi dell'istanza Proxmox e le macchine virtuali (QEMU) e i container (LXC) da esporre",
                 "data": {
                     "lxc": "Contenitori Linux (LXC)",
                     "nodes": "Nodi",
                     "qemu": "Macchine virtuali (QEMU)",
                     "storage": "Archivi",
                     "disks_enable": "Abilita informazioni dischi fisici",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Monitora le attività non riuscite"
                 },
                 "data_description": {
                     "disks_enable": "Se lavori con l'ibernazione del disco, devi disabilitare questa opzione nell'integrazione in modo che non provochi la riattivazione impropria dei dischi.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Tiene traccia delle attività non riuscite nelle ultime 24 ore sui nodi selezionati e le segnala."
                 }
             }
         },
@@ -217,7 +217,7 @@
                 "name": "Sospendi"
             },
             "reset": {
-                "name": "Reset"
+                "name": "Reimposta"
             },
             "wakeonlan": {
                 "name": "Wake-on-LAN"
@@ -249,16 +249,16 @@
                 "name": "Percentuale disco usato"
             },
             "disk_wearout": {
-                "name": "Wearout"
+                "name": "Usura"
             },
             "failed_tasks_count": {
-                "name": "Failed tasks",
+                "name": "Attività non riuscite",
                 "state_attributes": {
                     "recent_failures": {
-                        "name": "Recent failures"
+                        "name": "Errori recenti"
                     },
                     "last_failure_time": {
-                        "name": "Last failure time"
+                        "name": "Ora dell'ultimo errore"
                     }
                 }
             },
@@ -266,19 +266,19 @@
                 "name": "Vita rimanente"
             },
             "zfs_health": {
-                "name": "Health"
+                "name": "Stato di salute"
             },
             "zfs_free_perc": {
-                "name": "Free percentage"
+                "name": "Percentuale libera"
             },
             "zfs_total": {
                 "name": "Total"
             },
             "zfs_used": {
-                "name": "Used"
+                "name": "Utilizzato"
             },
             "zfs_used_perc": {
-                "name": "Used percentage"
+                "name": "Percentuale utilizzata"
             },
             "lxc_on": {
                 "name": "Contenitori in funzione",

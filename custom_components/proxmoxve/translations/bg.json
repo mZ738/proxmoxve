@@ -21,11 +21,11 @@
                     "lxc": "Линукс контейнери (LXC)",
                     "storage": "Хранилища за данни",
                     "disks_enable": "Активирайте информацията за физическия диск",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Наблюдение на неуспешните задачи"
                 },
                 "data_description": {
                     "disks_enable": "Ако работите с хибернация на диска, трябва да деактивирате тази опция за интегриране, за да не причинява неоправдано повторно активиране на дисковете.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Проследява и докладва неуспешните задачи през последните 24 часа на избраните възли."
                 }
             },
             "reauth_confirm": {
@@ -34,20 +34,20 @@
                 "data": {
                     "password": "Парола или токен стойност",
                     "username": "Потребителско име",
-                    "token_name": "Token name",
+                    "token_name": "Име на токена",
                     "realm": "Realm"
                 }
             },
             "reconfigure": {
-                "description": "Proxmox host information",
+                "description": "Информация за хоста Proxmox",
                 "data": {
                     "host": "Host",
-                    "password": "Password or token value",
-                    "token_name": "Token name",
+                    "password": "Парола или стойност на токена",
+                    "token_name": "Име на токена",
                     "port": "Port",
                     "realm": "Realm",
-                    "username": "Username",
-                    "verify_ssl": "Verify SSL certificate"
+                    "username": "Потребителско име",
+                    "verify_ssl": "Проверка на SSL сертификата"
                 }
             }
         },
@@ -62,7 +62,7 @@
             "already_configured": "Устройството вече е настроено",
             "no_resources": "За тази инстанция не бяха върнати ресурси.",
             "reauth_successful": "Повторното удостоверяване беше успешно",
-            "reconfigure_successful": "Reconfiguration completed successfully."
+            "reconfigure_successful": "Преконфигурирането завърши успешно."
         }
     },
     "issues": {
@@ -138,18 +138,18 @@
                 "description": "Proxmox хост информация"
             },
             "change_expose": {
-                "description": "Select the Proxmox instance nodes and Virtual Machines (QEMU) and Containers (LXC) you want to expose",
+                "description": "Изберете възлите на инстанцията Proxmox и виртуалните машини (QEMU) и контейнерите (LXC), които искате да покажете",
                 "data": {
                     "lxc": "Линукс контейнери (LXC)",
                     "nodes": "Възли",
                     "qemu": "Виртуални машини (QEMU)",
                     "storage": "Хранилища за данни",
                     "disks_enable": "Активирайте информацията за физическия диск",
-                    "tasks_enable": "Monitor failed tasks"
+                    "tasks_enable": "Наблюдение на неуспешните задачи"
                 },
                 "data_description": {
                     "disks_enable": "Ако работите с хибернация на диска, трябва да деактивирате тази опция за интегриране, така че да не причинява неоправдано повторно активиране на дисковете.",
-                    "tasks_enable": "Track and report failed tasks from the last 24 hours on selected nodes."
+                    "tasks_enable": "Проследява и докладва неуспешните задачи през последните 24 часа на избраните възли."
                 }
             }
         },
@@ -252,13 +252,13 @@
                 "name": "Износване на диск"
             },
             "failed_tasks_count": {
-                "name": "Failed tasks",
+                "name": "Неуспешни задачи",
                 "state_attributes": {
                     "recent_failures": {
-                        "name": "Recent failures"
+                        "name": "Скорошни неуспехи"
                     },
                     "last_failure_time": {
-                        "name": "Last failure time"
+                        "name": "Час на последния неуспех"
                     }
                 }
             },
@@ -266,19 +266,19 @@
                 "name": "Остатъчен живот"
             },
             "zfs_health": {
-                "name": "Health"
+                "name": "Състояние"
             },
             "zfs_free_perc": {
-                "name": "Free percentage"
+                "name": "Свободно в проценти"
             },
             "zfs_total": {
                 "name": "Total"
             },
             "zfs_used": {
-                "name": "Used"
+                "name": "Използвано"
             },
             "zfs_used_perc": {
-                "name": "Used percentage"
+                "name": "Използвано в проценти"
             },
             "lxc_on": {
                 "name": "Работещи контейнери",
