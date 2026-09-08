@@ -56,6 +56,19 @@ Both are auto-detected — whichever one is installed and enabled for temperatur
 
 This modifies the Proxmox VE API to inject `sensors -j` output into the `GET /nodes/{node}/status` response. No additional API calls are made by the integration.
 
+#### When readings come and go
+
+PVE-mods v2 does this in two steps: a collector inside `pveproxy` runs `sensors`, enriches it with drive and CPU names, and writes the result to `/run/pveproxy/pve-mod/sensors.json`; the API handler then reads that file back. When those two race, the field arrives in the response **present but empty**, and every hardware sensor would drop to *unknown* for that minute.
+
+The integration keeps the previous readings for up to ten minutes when a poll brings none, so a missed collection leaves no hole in the history. Past that it reports nothing, because by then the data really is gone rather than late — PVE-mods removed, the module unloaded, `lm-sensors` broken.
+
+If your hardware sensors go unknown for longer than that, check the source rather than the integration:
+
+```bash
+stat -c%s /run/pveproxy/pve-mod/sensors.json     # zero means the collector wrote nothing
+journalctl -u pveproxy --since today | grep -i pve-mod
+```
+
 #### Supported Hardware
 
 | Chip / Driver | Device Type | Examples |
