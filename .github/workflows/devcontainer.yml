@@ -1,0 +1,42 @@
+name: "Dev container"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+    paths: &paths
+      - "Dockerfile.dev"
+      - ".devcontainer/**"
+      - "requirements.txt"
+      - "requirements_test.txt"
+      - "scripts/setup"
+      - ".github/workflows/devcontainer.yml"
+  pull_request:
+    branches:
+      - "main"
+    paths: *paths
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: "Build the dev container"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout the repository"
+        uses: "actions/checkout@v7"
+
+      # Nothing else here builds this image, so a change to it - or to the
+      # base image it follows - is only noticed when someone opens the
+      # container. That is how an `apt-key` call survived until Debian trixie
+      # removed the command.
+      - name: "Build"
+        run: docker build --file Dockerfile.dev --tag proxmoxve-devcontainer .
+
+      - name: "Check the Python version and that the test deps install"
+        run: |
+          docker run --rm --volume "${{ github.workspace }}:/workspaces/proxmoxve" \
+            --workdir /workspaces/proxmoxve proxmoxve-devcontainer \
+            bash -c "python --version && scripts/setup && python -m pytest --version"
